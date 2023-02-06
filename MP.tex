@@ -1,0 +1,844 @@
+\documentclass[12pt]{report}			% Začátek dokumentu
+\usepackage{MP}							% Import stylu
+\usepackage{colortbl}
+\author{Kateřina Finková}
+\title{Tetris}
+\date{14. února 2023}
+\vedouci{Dr.rer.nat. Michal Kočer}
+\place{V Českých Budějovicích}
+\skolnirok{2022/2023}
+\logo{\includegraphics[scale=1.25]{GJ8_logotyp}}
+
+\begin{document}
+\pagenumbering{roman}                   % číslování stránek římskými číslicemi
+	\mytitlepage						% Vygenerování titulní strany
+	
+	\prohlaseni{
+		Prohlašuji, že jsem tuto práci vypracoval samostatně s vyznačením všech použitých pramenů.
+	}	
+	
+	\abstrakt{
+Tato práce se zabývá počítačovou hrou Tetris, jednou z nejznámějších počítačových her minulého století. V teoretické části se zaměřuji na historii Tetrisu, konkrétně na jeho rozšíření po světě a boj o jeho vlastnictví. V praktické části pak programuji Tetris v programovacím jazyce Python a popisuji vytvořený program.							% Abstrakt
+	}{Tetris, Počítačové hry, Programování počítačových her, Python, Pygame
+								% Klíčová slova
+	}
+	
+	\podekovani{ dopsat
+	
+								% Poděkování
+	}
+	
+   {\tableofcontents\newpage}			% Obsah
+	
+\addtocounter{page}{1}		% Posunutí countru stránek
+\pagenumbering{arabic}		% Číslování stránek arabskými číslicemi
+	\chapter*{Úvod}
+	dopsat
+			
+	
+	
+	\part{Historie Tetrisu}
+	
+		\chapter{Počátky Tetrisu}
+Tetris je počítačová hra vytvořená Alexejem Pažitnovem v roce 1984. Pažitnov se inspiroval hlavolamem Pentonimo. Hlavolam je složen z dřevěných dílků a krabičky, do které hráč umisťuje dílky tak, aby se tam všechny vešly.	\cite{Brown2016}
+
+Alexej pojmenoval dílky tetramino podle slova tetra znamenající čtyři, protože každý dílek se skládá ze čtyř bloků. Svou hru pojmenoval Tetris spojením slov tetra a tenis.\cite{Brown2016}\\
+	
+			\section{Alexej Pažitnov}
+Když mu bylo 17, poprvé se dotkl počítače. I když měl talent pro vědu a matematiku, programování mu napřed moc nešlo. I přesto ale viděl počítač jako svou budoucnost.\cite{Ackerman2016}
+
+Alexej původně pracoval v Moskevském institutu letectví, kde se s ostatními vědci střídal o počítač. Byla to velmi slibná a stabilní kariéra, ale rozhodl se odejít na Ruskou akademii věd do Dorodnitsynova výpočetního centra, kde později dostal svůj vlastní počítač Electronica 60. \cite{Brown2016}\\
+
+			\section{Výroba Tetrisu}
+Pažitnov spolupracoval s Dmitrijem Pavlovským, kolegou a přítelem z centra. Pavlovsky k nim přizval Vadima Gerasimova, teenagera, který byl ale velmi zkušený v programování. Přemýšleli nad tím, že by mohli prodávat balíček videoher, Pažitnovem pojmenovaným Computer FunFair, ale v té době to v Sovětském svazu nebylo možné. Místo toho se rozhodli zlepšovat své schopnosti. Snažili se spolu vytvářet klony her ze západu a zkoušeli přidávat zvuk, text a grafiku. Pod vedením Pavlovského vytvořili Antix, klon hry Xonix\footnote{Xonix \-- hra, ve které se pohybováním kosočtverce vytváří pole, do kterého už kosočtverec znovu nesmí.}. Hra se rychle rozšířila mezi ostatní pracovníky centra a i na některé domácí počítače v Moskvě.\cite{Ackerman2016} 
+
+Alexej se rozhodl Gerasimovovi ukázat svůj nejnovější projekt - Tetris. Byl to ale jen prototyp, Gerasimov mohl pohybovat tetraminy a vytvářet nové obrazce, ale cíl hry nebyl úplně jasný. Moc ho to nezaujalo, ale Pajitnov věděl, že to ještě není dokonalé. O pár měsíců později navrhl svým spolupracovníkům Tetris znovu, ale tentokrát už měla tetramina padat do úzké hranaté zasklené plochy a hromadit se dole. \cite{Ackerman2016}
+
+Pažitnov sám dopracoval Tetris a dál přemýšlel nad tím, že by hru prodával. Avšak Tetris nebyl ještě dokonalý. Hra neměla skórování, příběh, postavy, dobrou grafiku ani zvuk. Hra byla moc abstraktní a zaujala by jen pracovníky výpočetního centra. Dalším problémem bylo, že hra byla určena pro počítač Electronica 60, který byl napodobeninou v té době velmi zastaralého západního počítače, tudíž by ani moc lidí nemělo možnost si Tetris zahrát. \cite{Ackerman2016}
+
+Naštěstí Vadim Gerasimov uměl dobře s Microsoft DOS, operačním systémem, který běžel na v té době populárním IBM PC. Tento počítač uměl ukázat jednoduchou grafiku a barvy. Gerasimovovi se za pár dní podařilo program přepsat a Tetris se dál zlepšoval. Mezitím se hra rozšířila po výpočetním centru. \cite{Ackerman2016}
+
+Po dvou měsících byl Tetris už v takovém stavu, že byl podle Pažitnova čas ho rozšířit mezi širší publikum. Ale kdyby ho chtěli prodávat, Tetris by patřil Akademii věd, sami by software distribuovat nemohli. Proto nahráli Tetris na diskety a hra se rychle stala v Moskvě velmi populární.\cite{Ackerman2016}
+
+Vladimír Pokhilko, vědecký pracovník klinické psychologie v Moskevském zdravotním středisku, byl jedním z prvních, co hru dostali mimo výpočetní centrum. On a jeho spolupracovníci si hru tak zamilovali, že byl nucen všechny diskety vyhodit. Hru pak používal pro testování pacientů, později s Pažitnovem a Gerasimovem vytvořili Tetris pro dva hráče. Chtěl totiž pozorovat, jak budou hráči interagovat mezi sebou a se hrou.\cite{Ackerman2016}\\
+		\chapter{Cesta do světa}
+Hra zaujala spoustu lidí včetně Pažitnova nadřízeného, Viktora Brijabrina. Také si myslel, že by se Tetris mohl rozšířit dál, a tak poslal hru kolegům v Maďarsku. Na Institutu výpočetní techniky v Budapešti se Tetris rozšířil stejně rychle jako v Moskvě.  \cite{Ackerman2016}
+
+V Maďarsku byl představen na exhibici a padl do oka Robertu Steinovi, vlastníkovi britské firmy Andromeda software. Stein se rozhodl kontaktovat technický institut, kde Alexej pracoval, aby mohl získat práva pro distribuci hry. Lidé z institutu ho pozvali do Moskvy, kde se s ním dohodli, ale smlouva ještě nebyla uzavřena. \cite{Brown2016}
+
+Licenci od Steina získalo americké Spectrum Holobyte. Jelikož zájem americké společnosti o Sovětský svaz díky jednání Reagana a Gorbačova rostl, ředitele Spectrum Holobyte, Gilmana Louieho, napadlo hru propagovat hlavně tím, že pochází ze Sovětského svazu. Tato reklama se objevila na jedné celé straně novin USA Today. \cite{Brown2016}
+
+Robert Stein ale měl problém - licenci ke hře ještě oficiálně nevlastnil, avšak ji už prodal Spectrum Holobyte a britské firmě Mirrorsoft, které patřili druhému nejmocnějšímu vlastníkovi novin, Robertovi Maxwellovi. Potom, co se na hru objevila reklama v novinách, byl velmi motivován licenci oficiálně získat. \cite{Brown2016}\\
+			
+			\section{Jednání o licenci}
+Mezitím vznikla v Sovětském svazu agentura Elektronorgtechnica (zkráceně ELORG), která měla za úkol kontrolovat import a export softwaru a hardwaru. Ta nově začala vyjednávat se Steinem. Robert letěl opět do Moskvy, jednání trvala několik dní. Smlouva byla uzavřena ale až později, v květnu roku 1988. Tetris se mezitím stal nejprodávanější hrou v USA a Velké Británii a získal dvě ocenění od The Software Publishers Association. \cite{Brown2016}
+
+Mirrorsoft a Spectrum Holobyte přidali do hry stereotypní sovětské obrázky. Také přidali do hry letadlo Matthiase Rusta, který přistál na Rudém náměstí v Moskvě, který ale byl  Sovětském svazu považován za radikála. Stein tedy slíbil, že letadlo bude odstraněno. Nechtěl totiž o Tetris přijít, protože věděl, že mu může ještě vydělat spoustu peněz. \cite{Brown2016}
+
+Stein sdělil Mirrorsoftu, že má pro ně licenci na videoherní automaty. Mirrorsoft ji hned poté slíbil v Americe firmě Atari a v Japonsku firmě Sega, ale licenci ve skutečnosti nikdo z nich neměl. Stein se sice potkal v Paříži s ředitelem Elektronorgtechnica, ale zde byl pouze nucen zaplatit penále za nezaplacené licenční poplatky, další licenci nedostal. \cite{Brown2016}\\
+			
+		\chapter{Henk Rogers}
+Henk Rogers z Bulletproof Software se o Tetrisu dozvěděl v roce 1988 na akci v Las Vegas. Jelikož měl dobré kontakty v Japonsku, začal ihned jednat o licenci pro diskety a domácí konzole s Gilmanem Louiem. Louie mu licence slíbil, ale pak zjistil, že licenci k domácím konzolím v Japonsku už prodal Mirrorsoft firmě Sega.\cite{Brown2016}
+
+Nakonec vše vyřešil syn Roberta Maxwella, Kevin. Bulletproof Software získali práva na diskety a Atari získalo práva na vše ostatní. Všechno bylo dohodnuto bez jakéhokoli vědomí Elektronorgtechnica, která nedala tato práva nikomu, Stein si pouze myslel, že je vlastní.\cite{Brown2016}
+
+Henk byl ale rozhodnutý získat víc, a tak navštívil Atari. Po večeři s jejich ředitelem získal licenci pro Famicom - domácí herní konzoli od japonské firmy Nintendo, v Americe známé jako Nintendo Entertainment System. Stejně jako v Severní Americe a v Evropě měl Tetris v Japonsku obrovský úspěch. \cite{Brown2016}
+
+Elorg mělo ale smlouvu pouze s Andromeda Software a jen o licenci pro domácí počítače. Vůbec ještě netušili o úspěších Tetrisu v zahraničí a ani o tom, že se prodává i v jiném formátu než pro domácí počítač. Pažitnov o tom také nic nevěděl a už vůbec za to nebyl nijak finančně kompenzován. \cite{Brown2016}\\
+			
+		\chapter{Tetris pro Game Boy}
+Jedním z nejmocnějších fanoušků Tetrisu byl Minoru Arakawa, ředitel Nintenda. Nintendo zrovna vytvořilo novou přenosnou herní konzoli - Game Boy. Arakawa viděl obrovský potenciál ve spárování Gameboye s tak návykovou hrou jako je Tetris. Kontaktoval Henka Rogerse, aby mu zajistil licenci pro přenosné konzole. Tu už se snažil tou dobou získat Stein.\cite{Brown2016}
+
+Rogers si se Steinem vyměnili několik faxů, Stein neustále sliboval, že poletí vše stvrdit do Moskvy, ale k odletu se pořád neměl. Henk se rozhodl, že do Moskvy poletí sám, i když tam vůbec nikoho neznal. Kromě něj se tam vydal Kevin Maxwell, v Mirrorsoftu totiž přišli na to, že tahle práva zatím nikomu nepatří. Samozřejmě se do Moskvy vydal i Robert Stein.\cite{Brown2016}
+
+Henk byl v Sovětském svazu poprvé, nikoho tam neznal a ani nevěděl, kde se ředitelství Elektronorgtechnika v Moskvě nachází. Město bylo celé šedé, v hotelu nefungovala televize a do restaurace musel mít rezervaci. Když se zeptal na recepci, kde může najít ELORG, odpovědí mu byl jen vyděšený obličej. Bylo podezřelé se ptát, kde se nachází státní instituce. \cite{Ackerman2016}
+
+Ale to ho neodradilo. Když začínal v Japonsku, podařilo se mu navázat kontakt s prezidentem Nintenda tak, že mu napsal, že dokáže pro Famicom vytvořit deskovou hru Go - strategickou hru, kde je úkolem hráče zajmout kamínky protihráče - s dostatečně komplexní AI. \cite{Ackerman2016}
+
+V SSSR byla tato desková hra populární, a proto se rozhodl najít v Moskvě asociaci hráčů Go. Sice anglicky hráči neuměli, ale udělalo na ně dojem, že si chtěl zahrát s jedním z nejlepších sovětských hráčů. Díky tomu byl schopen se spojit s průvodkyní, která ho dovedla k jeho cíli. Varovala ho, že bez pozvání se tam nedostane.\cite{Ackerman2016}\\
+Nikolajevič Belikov byl v Elorgu postaven do čela vyjednávání ohledně Tetrisu. Byl připraven se potkat se Steinem a Kevinem Maxwellem v ten samý den. Vůbec nevěděl, že Henk Rogers je také v Moskvě. \cite{Brown2016}
+
+První schůzku měl Belikov s Henkem. Henk zde zjistil, že práva k Tetrisu mu vůbec nepatří, přesto se snažil Belikova přesvědčit, aby mu Elorg práva pro Nintendo prodalo. Belikov věděl, co nintendo znamená (!) a rozhodl se tajně upravit smlouvu se Steinem, kde doplnil, že Steinova práva se netýkají herních konzolí Nintenda. Také zvedl pokuty za nedodržování smlouvy, aby od jeho ostatních úprav odlákal pozornost. \cite{Brown2016}
+
+Další schůze byla s Maxwellem. Belikov před něj postavil Henkovu kopii hry (o které do toho dne nevěděl) a zeptal se ho, proč je na ní jméno Mirrorsoftu, když k Tetrisu Mirrorsoft práva nemá. Maxwella to rozhodilo natolik, že zapomněl, že práva ke hře skrz smlouvu se Steinem má a byl nucen odletět pryč, aby vymyslel novou nabídku se svým týmem.\cite{Brown2016}
+
+Belikov si nebyl jistý, jak Stein na novou smlouvu zareaguje, ale Stein si ničeho nevšiml a smlouvu podepsal. Díky tomu byly všechny verze Tetrisu, které nebyly pro domácí počítač, nelegální.\cite{Brown2016}
+
+Rogers se rychle vrátil do Moskvy s novou nabídkou. Rozhodl se ale ještě před tím najít Pažitnova a rychle se z nich stali přátelé. Henk opustil Moskvu s právy pro Nintendo a novou možností získat globální práva k Tetrisu. Arakawa v tom viděl možnost, jak vyhrát nad Atari.\cite{Brown2016}\\
+
+\chapter{Boj o globální licenci}
+Henk byl poslán zpět do Moskvy s novou smlouvou a právníkem. Mirrorsoft mělo pouze den na to, aby přišli s jejich nabídkou. Vložil se do toho Robert Maxwell a kontaktoval všechny své politické známosti. Belikov kvůli tomu začal být tlačen do smlouvy s Mirrorsoftem.\cite{Brown2016}
+
+Atari se rozhodlo zažalovat Nintendo. V Atari si mysleli, že vyhrají a začali svou verzi Tetrisu propagovat. Nakonec ale vyhrálo Nintendo a Henk mohl uzavřít smlouvu s Elorgem ohledně globálních práv k Tetrisu.\cite{Brown2016}\\
+
+doplnit
+\chapter{Pažitnov v Americe}
+Tetris se stal ještě populárnějším. Jeho prodeje bořily rekordy. Alexej Pažitnov ale pořád za svou hru žádné peníze nedostal. Henk se ale stal velmi bohatým. Pomohl Pažitnovi a jeho příteli Vladimírovi s jejich rodinami se odstěhovat v roce 1991 do Ameriky. Alexej si zde s Vladem založili herní firmu Animatek.\cite{Brown2016}
+
+V roce 1996 začal pracovat jako herní vývojář pro Microsoft. V tomto roce se také rozpadla Elektronorgtechnica. Pažitnov měl konečně šanci získat zpět Tetris, ihned s Henkem odletěli zpět do Moskvy. Vytvořili spolu The Tetris Company a práva k Tetrisu se konečně vrátila do správných rukou.\cite{Brown2016}\\
+				
+	\part{Klon tetrisu}
+		\chapter{Začátek programu}
+Program začínám importováním modulů pygame a random. Modul pygame potřebuji ke kreslení hry a k jejímu ovládání. Modul random v programu využívám k náhodnému generování tetrimin.
+
+Po importování modulů obsahuje program seznam barev. Tyto konkrétní barvy program používá k vybarvení tetrimin. Každá barva je vždy RGB kód, tady seznam tří čísel.
+\begin{lstlisting}[title={Program tetris.py}, caption={Importování modulů a tvorba barev tetrimin}, 							label={lst:tetris.py}]
+import pygame
+import random
+
+barvy = [
+    (0, 0, 0),
+    (251, 248, 204),
+    (255, 207, 210),
+    (241, 192, 232),
+    (207, 186, 240),
+    (163, 196, 243),
+    (180, 243, 248),
+    (185, 251, 192)
+]
+\end{lstlisting}
+
+		\chapter{Třída Tetrimino}
+Třída je skupina různých objektů s podobnými vlastnostmi. Třída Tetrimino vytváří herní dílek. Jako první definuji tvary jednotlivých dílků a jejich možné rotace. Dílky vlastně zakresluji do pomyslené tabulky se čtyřmi sloupci a čtyřmi řádkami. Každá buňka této tabulky je označena číslem od nuly do patnácti. Jednotlivé dílky jsou tudíž seznamy čísel buněk, které překrývají. Každou rotaci dílku vložím do jednoho seznamu, tyto seznamy vložím do seznamu tvary.
+\begin{lstlisting}[title={Program tetris.py}, caption={Tvary tetrimin}, 							label={lst:tetris.py}]
+class Tetrimino(object):
+    tvary = [
+        [[1,5,9,13],[4,5,6,7]], #I_tetrimino
+        [[4,5,9,10],[2,6,5,9]], #Z1_tetrimino 
+        [[6,7,9,10],[1,5,6,10]], #Z2_tetrimino
+        [[1,2,5,9],[0,4,5,6],[1,5,8,9],[4,5,6,10]],
+        #L1_tetrimino
+        [[1,2,6,10],[5,6,7,9],[2,6,10,11],[3,5,6,7]],
+        #L2_tetrimino
+        [[1,4,5,6],[1,4,5,9],[4,5,6,9],[1,5,6,9]], #T_tetrimino
+        [[1,2,5,6]] #O_tetrimino
+\end{lstlisting}
+\begin{table}[ht]
+\centering
+\begin{tabular}{|p{0,5cm}|p{0,5cm}|p{0,5cm}|p{0,5cm}||p{0,5cm}|p{0,5cm}|p{0,5cm}|p{0,5cm}||p{0,5cm}|p{0,5cm}|p{0,5cm}|p{0,5cm}||p{0,5cm}|p{0,5cm}|p{0,5cm}|p{0,5cm}|}
+  \hline
+  {0} & \cellcolor{gray!40}{1} & \cellcolor{gray!40}{2} & {3} & \cellcolor{gray!40}{0} & {1} & {2} & {3} & {0} & \cellcolor{gray!40}{1} & {2} & {3} & {0} & {1} & {2} & {3} \\
+  \hline 
+  4 & \cellcolor{gray!40}5 & 6 & 7 &\cellcolor{gray!40}4 & \cellcolor{gray!40}5 & \cellcolor{gray!40}6 & 7 & 4 & \cellcolor{gray!40}5 & 6 & 7 & \cellcolor{gray!40}4 & \cellcolor{gray!40}5 & \cellcolor{gray!40}6 & 7 \\
+  \hline 
+  8 & \cellcolor{gray!40}9 & 10 & 11 & 8 & 9 & 10 & 11 & \cellcolor{gray!40}8 & \cellcolor{gray!40}9 & 10 & 11 & 8 & 9 & \cellcolor{gray!40}10 & 11 \\
+  \hline 
+  12 & 13 & 14 & 15 & 12 & 13 & 14 & 15 & 12 & 13 & 14 & 15 & 12 & 13 & 14 & 15 \\
+  \hline 
+\end{tabular}
+\caption{Všechny možné rotace tetrimina L1}
+\label{table:ta}
+\end{table}
+
+			\section{Konstruktor}
+Konstruktor třídy je část kódu třídy, kde jsou všechny údaje o objektu patřícím do této třídy.
+V konstruktoru třídy Tetrimino jsou souřadnice x a y, které udávají místo na herní ploše, odkud se načítá tetrimino (buňka nula v naší tabulce). Self.typ udává tvar dílku.  Je to číslo, pod kterým je schovaný seznam rotací v seznamu tvary. Jelikož je každý tvar tetrimina náhodný, tak použiji příkaz random.randint a do závorky napíši, z jakého rozpětí čísel má číslo tvaru být, tedy on nuly až do délky seznamu tvary. Od délky seznamu musí být odečtena jednička, protože položky seznamu jsou číslovány od nuly, jinak by se mohlo vygenerovat číslo tvaru, které už v seznamu není.
+
+Self.barva je barva tetrimina. Protože chci, aby každý dílek měl svou příslušnou barvu, tak se barva musí rovnat hodnotě self.typ. Jelikož ale políčka v herní ploše, která neobsahují žádné tetrimino, mají hodnotu nula, tak se self.barva nemůže rovnat nule, neboť by pro ostatní dílky dílek neexistoval a mohly by jím volně procházet. Proto je hodnota self.barva zvětšeno o 1, aby k tomuto problému nedocházelo. Self.r značí otočení dílku. Self.r základního tvaru dílku je vždy rovno nule.
+\begin{lstlisting}[title={Program tetris.py}, caption={Konstruktor třídy Tetrimino}, 							label={lst:tetris.py}]
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.typ = random.randint(0, len(self.tvary) - 1)
+        self.barva = self.typ + 1
+        self.r = 0
+\end{lstlisting}  
+
+			\section{Funkce třídy Tetrimino}
+Funkce okoli zjišťuje, která část tabulky je zaplněna tetriminem. Když použiji tuto funkci, tak vypíše, které buňky v tabulce dílek překrývá. Funkce to udělá tak, že vybere ze seznamu tvary seznam rotací podle toho, kolik je self.typ. Poté vybere ze seznamu rotací tetrimina tvar podle toho, jakou má tetrimino self.r. \\\\
+\begin{lstlisting}[title={Program tetris.py}, caption={Funkce okoli}, 							label={lst:tetris.py}]
+    def okoli(self):
+        return self.tvary[self.typ][self.r]
+\end{lstlisting}
+Dále musím nadefinovat otáčení tetrimina. Když chci otočit dílek doprava, tak přičtu k self.r jedničku, to pak vydělím počtem tvarů otočení dílku. Podle toho, jaké vznikne z tohoto dělení modulo pak zjistím, jak se má tetrimino otočit. To samé udělám při otočení doleva, ale místo přičtení od self.r odečtu.   
+\begin{lstlisting}[title={Program tetris.py}, caption={Otáčení tetrimina}, 							label={lst:tetris.py}]
+    def otoc_R(self):
+        self.r = (self.r + 1) % len(self.tvary[self.typ])
+
+    def otoc_L(self):
+        self.r = (self.r - 1) % len(self.tvary[self.typ])
+\end{lstlisting}
+
+		\chapter{Třída Tetris}
+Druhou třídou mého programu je třída Tetris. Tato třída obsahuje všechny potřebné funkce pro běh hry. Napřed si předdefinuji některé proměnné. Proměnná highscore si pamatuje nejlepší výsledek hráče. Pamatuje si jej ale jen během jednoho zapnutí, když hráč hru vypne a znovu zapne, nastaví se highscore opět na nulu. X a y jsou souřadnice bodu, kde začíná herní plocha. Zoom je zvětšení, které používám v programu jako velikost strany jednotlivých čtverců herní plochy. Proměnná tetrimino označuje momentální padající dílek, který zatím není vygenerován.
+\begin{lstlisting}[title={Program tetris.py}, caption={Proměnné třídy Tetris}, 							label={lst:tetris.py}]
+class Tetris(object):
+    highscore = 0
+    x = 100
+    y = 60
+    zoom = 20
+    tetrimino = None
+\end{lstlisting}
+
+    			\section{Konstruktor}
+Self.height a self.width jsou výška a šířka hrací plochy. Self.pole je výpisem všech poloh na hrací ploše, jedničky představují zaplněná místa a nuly místa prázdná. Self.score je momentální skóre hráče, které je na začátku hry nula. Self.status je momentální stav hry. Stav "game" je počáteční stav.
+\begin{lstlisting}[title={Program tetris.py}, caption={Konstruktor třídy Tetris}, 							label={lst:tetris.py}]		
+    def __init__(self, height, width):
+        self.height = height
+        self.width = width
+        self.pole = []
+        self.score = 0
+        self.status = "game"
+\end{lstlisting}
+V konstruktoru také vytváříme herní plochu. Podle toho, jak je herní plocha vysoká, program vygeneruje jednotlivé řádky new\_ line. Podle toho, jak je herní plocha široká, se vloží do každé new\_ line nuly. Každá tato řádka se pak uloží do self.pole.\\
+\begin{lstlisting}[title={Program tetris.py}, caption={Tvorba herní plochy}, 							label={lst:tetris.py}]
+        for i in range(height):
+            new_line = []
+            for j in range(width):
+                new_line.append(0)
+            self.pole.append(new_line)
+\end{lstlisting}
+
+			\section{Funkce třídy Tetris}
+Funkce new\_tetrimino má na starosti generování nového tetrimina. Nový dílek se vždy objeví na souřadnicích [3,0].
+\begin{lstlisting}[title={Program tetris.py}, caption={Vytvoření nového tetrimina}, 							label={lst:tetris.py}]		
+    def new_tetrimino(self):
+        self.tetrimino = Tetrimino(3, 0)
+\end{lstlisting}
+Funkce prekryti zjišťuje, zda tetrimino, která padá dolů, překrývá jiný dílek nebo jestli je mimo herní plochu. Pokud dílek nic nepřekrývá, pak má proměnná kryt hodnotu False. 
+Souřadnice x a y jsou levý horní roh mřížky, kterou zaplňuje tetrimino. Abychom tedy  zjistili překrytí v rámci celého dílku, musíme postupně kontrolovat všechny čtverečky tetrimina. Proto postupně generujeme čísla, která by mohla patřit do seznamu zjištěného pomocí funkce okoli. Za podmínky, že je vygenerované číslo v seznamu, tak aby se proměnná kryt změnila na hodnotu true, musí být splněna jedna z těchto podmínek:
+\begin{itemize}
+\item tetrimino je níž než je dolní hranice herní plochy
+\item tetrimino je za pravou hranicí herní plochy
+\item tetrimino je za levou hranicí herní plochy
+\item dané místo herní plochy je už zaplněno jiným dílkem 
+\end{itemize}
+\begin{lstlisting}[title={Program tetris.py}, caption={Funkce překrytí}, 							label={lst:tetris.py}]		
+    def prekryti(self):
+        kryt = False
+        for i in range(4):
+            for j in range(4):
+                if i * 4 + j in self.tetrimino.okoli():
+                    if i + self.tetrimino.y > self.height - 1 or j + self.tetrimino.x > self.width - 1 or j + self.tetrimino.x < 0 or \
+                        self.pole[i + self.tetrimino.y][j + self.tetrimino.x] > 0:
+                            kryt = True
+        return kryt
+\end{lstlisting}
+\begin{table}[ht]
+\centering
+\begin{tabular}{|p{2cm}|p{2cm}|p{2cm}||p{2cm}|p{2cm}|p{2cm}|}
+  \hline
+  {i} & {j} & {výsledek} & {i} & {j} & {výsledek}\\
+  \hline 
+  0 & 0 & 0 & 1 & 0 & 4\\
+  \hline 
+  0 & 1 & 1 & 1 & 1 & 5\\
+  \hline 
+  0 & 2 & 2 & 1 & 2 & 6\\
+  \hline 
+  0 & 3 & 3 & 1 & 3 & 7\\
+  \hline 
+\end{tabular}
+\end{table}
+\begin{table}[ht]
+\centering
+\begin{tabular}{|p{2cm}|p{2cm}|p{2cm}||p{2cm}|p{2cm}|p{2cm}|}
+  \hline
+  {i} & {j} & {výsledek} & {i} & {j} & {výsledek}\\
+  \hline 
+  2 & 0 & 8 & 3 & 0 & 12 \\
+  \hline 
+  2 & 1 & 9 & 3 & 1 & 13\\
+  \hline 
+  2 & 2 & 10 & 3 & 2 & 14\\
+  \hline 
+  2 & 3 & 11 & 3 & 3 & 15\\
+  \hline 
+\end{tabular}
+\caption{Generování čísel pro kontrolu překrytí.}
+\label{table:ta}
+\end{table}
+Funkce plna\_ line zjišťuje, jestli je řádek už zcela zaplněný tetriminy.
+doplnit
+\begin{lstlisting}[title={Program tetris.py}, caption={Funkce plna\_ line}, 							label={lst:tetris.py}]	
+    def plna_line(self):
+        lines = 0
+        for i in range(1, self.height):
+            nuly = 0
+            for j in range(self.width):
+                if self.pole[i][j] == 0:
+                    nuly += 1
+            if nuly == 0:
+                lines += 1
+                for k in range(i, 1, -1):
+                    for l in range(self.width):
+                        self.pole[k][l] = self.pole[k - 1][l]
+        self.score += lines
+        if self.score > self.highscore:
+            self.highscore = self.score
+\end{lstlisting}
+Funkce slam posune dílek na nejnižší možné místo v hrací ploše. Dílek bude padat tak dlouho, dokud nebude něco překrývat. Pak se posune o jedna zpět, protože by jinak byl mimo herní plochu nebo překrýval jiné tetrimino. Nakonec se dílek zastaví, aby hráč mohl začít pohybovat s dalším.
+\begin{lstlisting}[title={Program tetris.py}, caption={Funkce slam}, 							label={lst:tetris.py}]	
+    def slam(self):
+        while not self.prekryti():
+            self.tetrimino.y += 1
+        self.tetrimino.y -= 1
+        self.stop()
+\end{lstlisting}
+Funkce go\_ down posouvá tetrimina dolů. Vlastně je tato funkce velmi podobná funkci slam ale s tím rozdílem, že funkce slam nechá spadnout dílek rovnou, kdyžto funkce go\_ down posouvá dílek dolů postupně. Pokud dílek něco překryje tak ho také posune zpět nahoru a zastaví.
+\begin{lstlisting}[title={Program tetris.py}, caption={Funkce go\_ down}, 							label={lst:tetris.py}]     
+    def go_down(self):
+        self.tetrimino.y += 1
+        if self.prekryti():
+            self.tetrimino.y -= 1
+            self.stop()
+\end{lstlisting}
+Funkce stop zastaví pohyb dílku, když dopadne. Vybarví příslušné čtverečky tetrimina, pak zkontroluje, zda se hráči povedlo vyplnit celý řádek. Následně vygeneruje nové tetrimino, pokud zjistí, že nový dílek už překrývá jiný, změní status hry na "gameover".
+doplnit
+\begin{lstlisting}[title={Program tetris.py}, caption={Funkce stop}, 							label={lst:tetris.py}]
+    def stop(self):
+        for i in range(4):
+            for j in range(4):
+                if i * 4 + j in self.tetrimino.okoli():
+                    self.pole[i + self.tetrimino.y][j + self.tetrimino.x] = self.tetrimino.barva
+        self.plna_line()
+        self.new_tetrimino()
+        if self.prekryti():
+            self.status = "gameover"
+\end{lstlisting}
+Funkce go\_ side\_ R a go\_ side\_ L hýbou dílkem doprava respektive doleva. Funkce si zapamatuje momentální souřadnici x, poté k ní přičte jedna pro posunutí doprava nebo odečte jedna pro posunutí doleva. Pokud ale dílek bude překrývat jiný nebo bude mimo herní plochu, tak vrátí dílek na svou původní souřadnici.
+\begin{lstlisting}[title={Program tetris.py}, caption={Funkce go\_ side\_ R a go\_ side\_ L}, 							label={lst:tetris.py}]
+    def go_side_R(self):
+        x = self.tetrimino.x
+        self.tetrimino.x += 1
+        if self.prekryti():
+            self.tetrimino.x = x
+            
+    def go_side_L(self):
+        x = self.tetrimino.x
+        self.tetrimino.x -= 1
+        if self.prekryti():
+            self.tetrimino.x = x
+\end{lstlisting}
+Funkce otoc\_ R a otoc\_ L otáčí dílek doprava respektive doleva. Funkce si uloží momentální rotaci dílku, pak ho otočí příslušným směrem. Když zjistí, že tímto pohybem překryje jiné tetrimino nebo dílek bude mimo herní plochu, tak nastaví r na původní rotaci.
+\begin{lstlisting}[title={Program tetris.py}, caption={Funkce otoc\_ R a otoc\_ L}, 							label={lst:tetris.py}]
+    def otoc_R(self):
+        old_r = self.tetrimino.r
+        self.tetrimino.otoc_R()
+        if self.prekryti():
+            self.tetrimino.r = old_r
+
+    def otoc_L(self):
+        old_r = self.tetrimino.r
+        self.tetrimino.otoc_L()
+        if self.prekryti():
+            self.tetrimino.r = old_r
+\end{lstlisting}
+	\chapter{Pygame}
+Pygame je modul, který se používá pro programování her v Pythonu. Abych ho mohla použít, musím tento modul po importování ještě načíst. K tomu slouží příkaz pygame.init(). Poté si vypíšu barvy, které budu dále potřebovat, každou barvu zapíši jako rgb kód. BARVA1 je šedivá, kterou použiji jako barvu pozadí. BARVA2 je černá, tou je vybarvena mřížka hrací plochy. Pro tlačítka ovládání jsou barvy 3 a 4. BARVA3 je zároveň použita i jako barva většiny textů. Text highscore a Game over je nakreslen pomocí BARVA5. Proměnná screen označuje okno, ve kterém se bude zobrazovat hra. Pro velikost okna použiji proměnnou size. Pak nastavím název okna hry na Tetris.\\
+\begin{lstlisting}[title={Program tetris.py}, caption={Počátek Pygame}, 							label={lst:tetris.py}]
+pygame.init()
+
+BARVA1 = (50, 50, 50)
+BARVA2 = (0, 0, 0)
+BARVA3 = (161, 121, 226)
+BARVA4 = (207, 186, 240)
+BARVA5 = (255, 173, 179)
+
+size = (400, 500)
+screen = pygame.display.set_mode(size)
+pygame.display.set_caption("Tetris")
+\end{lstlisting}
+Proměnná konec označuje, jestli hra stále běží. Pokud hráč hru vypne, tak se konec změní na True. Proměnná hodiny vytvoří hodiny pro počítání času. Pro výpočet aktualizování obrazu použiji proměnnou fps. Spuštění a upravování Tetrisu budu dělat za pomoci proměnné hry, kam zároveň napíšu i výšku a šířku potřebnou pro vytvoření herní plochy.
+Do proměnné pocitadlo ukládám jaký čas už uběhl.
+Proměnná zmacknuti je v programu použita při zaznamenávání, zda je zmáčknutá klávesa šipka dolů.
+\begin{lstlisting}[title={Program tetris.py}, caption={Další proměnné pro Pygame}, 							label={lst:tetris.py}]
+konec = False
+hodiny = pygame.time.Clock()
+fps = 25
+hra = Tetris(20, 10)
+pocitadlo = 0
+zmacknuti = False
+\end{lstlisting}
+\section{Počátek hlavní programové smyčky}
+Hlavní programová smyčka je místo v programu, kde se odehrává celý děj programu. Všechen následující kód patří do této smyčky.
+Pokud nebylo vygenerováno žádné tetrimino a stav hry je nastaven na "start", tak hra vytvoří nové tetrimino.
+\begin{lstlisting}[title={Program tetris.py}, caption={Počátek hlavní programové smyčky}, 							label={lst:tetris.py}]
+while not konec:
+    if (hra.tetrimino is None) and (hra.status == "start"):
+        hra.new_tetrimino()
+\end{lstlisting}
+\section{Pohyb dolů}
+Jak už bylo výše řečeno, proměnná pocitadlo zaznamenává uběhlý čas. Kdykoliv se rozběhne smyčka, tak se k této proměnné přičte jedna. 
+Následně řeším, kdy se má pohybot tetrimino dolů. Pokud je zbytek po dělení pocitadlo fps roven nule nebo hráč zmáčkl tlačítko šipka dolů a k tomu je stav hry "start", pak hra posune momentálně pohybující se dílek dolů.
+\begin{lstlisting}[title={Program tetris.py}, caption={Pohyb dolů}, 							label={lst:tetris.py}]
+    pocitadlo += 1
+    if (pocitadlo % fps == 0 or zmacknuti) and hra.status == "start":
+        hra.go_down()
+\end{lstlisting}
+\section{Události}
+V této části smyčky program zjišťuje jestli hráč např. nezmáčkl určitou klávesu nebo jestli někam neklikl. Když hráč hru vypne neboli zavře okno s hrou, tak se konec nastaví na True a hra se zavře.
+Dále ošetřuji, co program udělá, když hráč zmáčkne některé klávesy.
+Pokud status hry není "gameover", tak program zjišťuje, zda jsou zmáčknuty tyto klávesy:
+\begin{itemize}
+\item Klávesa D \-- dílek se otočí doprava
+\item Klávesa A \-- dílek se otočí doleva
+\item Klávesa šipka dolů \-- zmáčknutí se nastaví na True
+\item Klávesa šipka doleva \-- dílek se posune doleva
+\item Klávesa šipka doprava \-- dílek se posune doprava
+\item Klávesa S \-- dílek dopadne na nejnižší možné místo na herní ploše.
+\end{itemize}
+Pokud je status hry "gameover" nebo "menu2" a zároveň přestane být stiknuta klávesa šipka dolů, tak se proměnná zmacknuti změní na False. Program nechá padat tetrimino dál, ale pomaleji, než když hráč mačká příslušnou klávesu.
+\begin{lstlisting}[title={Program tetris.py}, caption={Ošetření událostí}, 							label={lst:tetris.py}]
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            konec = True
+        if event.type == pygame.KEYDOWN:
+            if hra.status != "gameover":
+                if event.key == pygame.K_d:
+                    hra.otoc_R()
+                if event.key == pygame.K_a:
+                    hra.otoc_L()
+                if event.key == pygame.K_DOWN:
+                    zmacknuti = True
+                if event.key == pygame.K_LEFT:
+                    hra.go_side_L()
+                if event.key == pygame.K_RIGHT:
+                    hra.go_side_R()
+                if event.key == pygame.K_s:
+                    hra.slam()
+            if hra.status == "gameover" or hra.status == "menu2":
+                if event.key == pygame.K_ESCAPE:
+                    hra.__init__(20, 10)
+                    hra.status = "start"
+        if event.type == pygame.KEYUP:
+                if event.key == pygame.K_DOWN:
+                    zmacknuti = False
+\end{lstlisting}
+Když hráč někam v okně klikne, tak program zjistí, na jaké konkrétní místo hráč klikl. Za podmínky, že je stav hry roven "menu" nebo "game" a zároveň hráč klikl na místo, kde se v těchto dvou stavech nachází tlačítko Start, tak se stav hry změní na "start", což znamená, že začne padat první tetrimino. Když hráč klikne na místo, kde se nachází tlačítko Menu a stav hry je "game", tak se stav změní na "menu".
+Pokud je stav hry roven "gameover", tak se stav změní na "menu2".
+\begin{lstlisting}[title={Program tetris.py}, caption={Ošetření události kliknutí myší}, 							label={lst:tetris.py}]
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mys = pygame.mouse.get_pos()
+            if hra.status == "menu" or hra.status == "game":
+                if 5 <= mys[0] <= 70 and 30 <= mys[1] <= 50:
+                    hra.status = "start"
+            if 5 <= mys[0] <= 70 and 60 <= mys[1] <= 80:
+                if hra.status == "game":    
+                    hra.status = "menu"
+                if hra.status == "gameover":    
+                    hra.status = "menu2"
+\end{lstlisting}
+\section{Kreslení herní plochy}
+dopsat
+\begin{lstlisting}[title={Program tetris.py}, caption={Kreslení herní plochy}, 							label={lst:tetris.py}]
+    screen.fill(BARVA1)    
+    for i in range(hra.height):
+        for j in range(hra.width):
+            pygame.draw.rect(screen, BARVA2, [hra.x + hra.zoom * j, hra.y + hra.zoom * i, hra.zoom, hra.zoom], 1)
+            if hra.pole[i][j] > 0:
+                pygame.draw.rect(screen, barvy[hra.pole[i][j]], [hra.x + hra.zoom * j + 1, hra.y + hra.zoom * i + 1, hra.zoom - 2, hra.zoom - 2]) 
+
+    if hra.tetrimino is not None:
+        for i in range(4):
+            for j in range(4):
+                p = i * 4 + j
+                if p in hra.tetrimino.okoli():
+                    pygame.draw.rect(screen, barvy[hra.tetrimino.barva], [hra.x + hra.zoom * (j + hra.tetrimino.x) + 1,
+                        hra.y + hra.zoom * (i + hra.tetrimino.y) + 1, hra.zoom - 2, hra.zoom - 2])
+\end{lstlisting}
+		\section{Nápisy}
+Zde vytvářím fonty pro texty, které se objevují ve hře. Font vytvářím tak, že za pomoci pygame.font.SysFont program nechám najít v počítači font Rockwell, poté zadám velikost písma a jestli bude text tučně nebo kurzívou.
+\begin{lstlisting}[title={Program tetris.py}, caption={Fonty}, 							label={lst:tetris.py}]
+    font = pygame.font.SysFont('rockwell', 25, True, False)
+    font1 = pygame.font.SysFont('rockwell', 12, True, False)
+\end{lstlisting}
+Pro vytvoření textu použiji font.render. Samozřejmě napíši, co chci aby v textu stálo. Další v závorce je anti-alias. Když bude mít hodnotu False, bude mít v zaoblených částech písmen viditelné pixely, pokud bude mít hodnotu True, pixely viditelné nebudou. Protože je ale text docela přiblížený, bude při hodnotě True vypadat spíše rozmazaně, proto jsem zvolila hodnotu False. Poslední, co v závorce uvádím, je barva textu.
+
+Pro texty, které vypysují skóre a nejlepší skóre musím zapsat text jako f-string, abych do nich mohla vypisovat čísla z k nim korespondujících proměnných.
+\begin{lstlisting}[title={Program tetris.py}, caption={Texty}, 							label={lst:tetris.py}]
+    font = pygame.font.SysFont('rockwell', 25, True, False)
+    font1 = pygame.font.SysFont('rockwell', 12, True, False)
+    text = font.render(f"Score: {str(hra.score)}", False, BARVA3)
+    text_start = font.render("Start", False, BARVA3)
+    text_menu = font.render("Menu", False, BARVA3)
+
+    text_controls_A = font1.render("A - turn left", False, BARVA3)
+    text_controls_D = font1.render("D - turn right", False, BARVA3)
+    text_controls_S = font1.render("S - slam", False, BARVA3)
+    text_controls_Move = font1.render("use arrows to move", False, BARVA3)
+    
+    text_controls_New = font1.render("Esc - play again", False, BARVA3)
+    text_game_over = font.render("Game Over", False, BARVA5) 
+    text_highscore = font1.render(f"Highcore: {str(hra.highscore)}", False, BARVA5)   
+\end{lstlisting}
+Příkazem screen.blit vložím do okna text skóre, souřadnice [5,0] označují místo v okně, odkud se bude text vytvářet.
+\begin{lstlisting}[title={Program tetris.py}, caption={Nakreslení skóre}, 							label={lst:tetris.py}]
+    screen.blit(text, [5, 0])
+\end{lstlisting}
+		\section{Stavy hry}
+			\subsection{Gameover}
+Hra se nastaví do stavu gameover poté, co hráč prohraje. Nad herní plochu program napíše text Game Over. Doleva pak vloží tlačítko Menu a jeho text, jak začít novou hru. Pod to ještě napíše nejlepší hráčův výsledek.
+\begin{lstlisting}[title={Program tetris.py}, caption={Stav "gameover"}, 							label={lst:tetris.py}]
+    if hra.status == "gameover":
+        screen.blit(text_game_over, [135, 20])
+        pygame.draw.rect(screen, BARVA4, [5,60,70,20])
+        screen.blit(text_menu, [7,54])
+        screen.blit(text_controls_New, [5, 24])
+        screen.blit(text_highscore, [5, 36])
+\end{lstlisting}
+			\subsection{Game}
+Stav game je úvodním stavem hry. Hra zobrazí tlačítka Start a Menu.
+\begin{lstlisting}[title={Program tetris.py}, caption={Stav "game"}, 							label={lst:tetris.py}]
+    if hra.status == "game":
+        pygame.draw.rect(screen, BARVA4, [5,30,70,20])
+        screen.blit(text_start, [11,24])
+        pygame.draw.rect(screen, BARVA4, [5,60,70,20])
+        screen.blit(text_menu, [7,54])
+\end{lstlisting}
+			\subsection{Menu}
+Po kliknutí na tlačítko Menu na úvodní obrazovce hry nastává stav menu. Hra vypíše pomocí jakých kláves ji má hráč ovládat.
+\begin{lstlisting}[title={Program tetris.py}, caption={Stav "menu"}, 							label={lst:tetris.py}]
+    if hra.status == "menu":
+        pygame.draw.rect(screen, BARVA4, [5,30,70,20])
+        screen.blit(text_start, [11,24])
+        screen.blit(text_controls_A, [5, 54])
+        screen.blit(text_controls_D, [5, 64])
+        screen.blit(text_controls_S, [5, 74])
+        screen.blit(text_controls_Move, [5, 84])
+\end{lstlisting}
+			\subsection{Menu2}
+Stav menu2 nastává, když po prohře hráč klikna na tlačítko Menu. Tento stav je velmi podobný stavu menu. Program ale ještě vypíše nejlepší skóre a jak začít novou hru.
+\begin{lstlisting}[title={Program tetris.py}, caption={Stav "menu2"}, 							label={lst:tetris.py}]
+    if hra.status == "menu2":
+        screen.blit(text_controls_A, [5, 54])
+        screen.blit(text_controls_D, [5, 64])
+        screen.blit(text_controls_S, [5, 74])
+        screen.blit(text_controls_Move, [5, 84])
+        screen.blit(text_controls_New, [5, 104])
+        screen.blit(text_highscore, [5, 116])
+\end{lstlisting}
+		\section{Ukončení programu}
+Příkaz pygame.quit() se nachází už mimo hlavní programovou smyčku. Tento příkaz ukončuje pygame.
+doplnit
+\begin{lstlisting}[title={Program tetris.py}, caption={Ukončení programu}, 							label={lst:tetris.py}]
+    pygame.display.flip()
+    hodiny.tick(fps)
+
+pygame.quit()
+\end{lstlisting}
+	\chapter*{Závěr}
+Cílem teoretické části práce bylo představit historii Tetrisu.
+V této části práce vidím jako hlavní přínos přiblížení minulosti Tetrisu českému publiku, neboť jsem během hledání zdrojů pro tuto část na žádný český důvěryhodnější zdroj než Wikipedii nenarazila.
+
+Cílem praktické části bylo vytvořit funkční klon Tetrisu v programovacím jazyce Python.
+dopsat
+
+Samozřejmě by se dal program ještě vylepšit. Program by kromě momentálního tetrimina mohl generovat ještě například čtyři následující dílky, které by ukázal hráči. Hráč by díky tomu mohl efektivněji umisťovat dílky a možná by tím dosáhl i lepšího výsledku.
+
+V klasické verzi Tetrisu je také hold. Hold je místo, kam si hráč může "schovat" tetrimino, dokud se nenaskytne vhodná chvíle ho použít. Opět by se tím zlepšila pravděpodobnost hráče dosáhnout vyššího skóre. 
+
+Obě tato zlepšení jsou ale už poměrně složitá pro implementování do programu. Zároveň si myslím, že hra je dostatečně zajímavá a zábavná na to, aby se bez těchto úprav obešla. 
+	
+	
+	\nocite{*}
+    \printbibliography					% Vytvoří seznam literatury
+	\addcontentsline{toc}{chapter}{Bibliografie}
+    \printglossary[title={Zkratky}]		% Vytvoří seznam zkratek
+    \listoffigures						% Vytvoří seznam obrázků
+    \listoftables						% Vytvoří seznam tabulek
+
+    \begin{appendices}
+	\chapter{Vlastní program}	
+\begin{lstlisting}[title={Program tetris.py}, caption={tetris.py}, 							label={lst:tetris.py}]
+import pygame
+import random
+
+
+barvy = [
+    (0, 0, 0),
+    (251, 248, 204),
+    (255, 207, 210),
+    (241, 192, 232),
+    (207, 186, 240),
+    (163, 196, 243),
+    (180, 243, 248),
+    (185, 251, 192)
+]
+
+class Tetrimino(object):
+    tvary = [
+        [[1,5,9,13],[4,5,6,7]],
+        [[4,5,9,10],[2,6,5,9]],
+        [[6,7,9,10],[1,5,6,10]],
+        [[1,2,5,9],[0,4,5,6],[1,5,8,9],[4,5,6,10]],
+        [[1,2,6,10],[5,6,7,9],[2,6,10,11],[3,5,6,7]],
+        [[1,4,5,6],[1,4,5,9],[4,5,6,9],[1,5,6,9]],
+        [[1,2,5,6]]
+    ]
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.typ = random.randint(0, len(self.tvary) - 1)
+        self.barva = self.typ + 1
+        self.r = 0    
+
+    def okoli(self):
+        return self.tvary[self.typ][self.r]
+
+    def otoc_R(self):
+        self.r = (self.r + 1) % len(self.tvary[self.typ])
+    def otoc_L(self):
+        self.r = (self.r - 1) % len(self.tvary[self.typ])
+
+
+class Tetris(object):
+    highscore = 0
+    x = 100
+    y = 60
+    zoom = 20
+    tetrimino = None
+
+    def __init__(self, height, width):
+        self.height = height
+        self.width = width
+        self.pole = []
+        self.score = 0
+        self.status = "game"
+        for i in range(height):
+            new_line = []
+            for j in range(width):
+                new_line.append(0)
+            self.pole.append(new_line)
+
+    def new_tetrimino(self):
+        self.tetrimino = Tetrimino(3, 0)
+
+    def prekryti(self):
+        kryt = False
+        for i in range(4):
+            for j in range(4):
+                if i * 4 + j in self.tetrimino.okoli():
+                    if i + self.tetrimino.y > self.height - 1 or j + self.tetrimino.x > self.width - 1 or j + self.tetrimino.x < 0 or \
+                        self.pole[i + self.tetrimino.y][j + self.tetrimino.x] > 0:
+                            kryt = True
+        return kryt
+
+    def plna_line(self):
+        lines = 0
+        for i in range(1, self.height):
+            nuly = 0
+            for j in range(self.width):
+                if self.pole[i][j] == 0:
+                    nuly += 1
+            if nuly == 0:
+                lines += 1
+                for k in range(i, 1, -1):
+                    for l in range(self.width):
+                        self.pole[k][l] = self.pole[k - 1][l]
+        self.score += lines
+        if self.score > self.highscore:
+            self.highscore = self.score
+
+    def slam(self):
+        while not self.prekryti():
+            self.tetrimino.y += 1
+        self.tetrimino.y -= 1
+        self.stop()
+
+    def go_down(self):
+        self.tetrimino.y += 1
+        if self.prekryti():
+            self.tetrimino.y -= 1
+            self.stop()
+
+    def stop(self):
+        for i in range(4):
+            for j in range(4):
+                if i * 4 + j in self.tetrimino.okoli():
+                    self.pole[i + self.tetrimino.y][j + self.tetrimino.x] = self.tetrimino.barva
+        self.plna_line()
+        self.new_tetrimino()
+        if self.prekryti():
+            self.status = "gameover"
+
+    def go_side_R(self):
+        x = self.tetrimino.x
+        self.tetrimino.x += 1
+        if self.prekryti():
+            self.tetrimino.x = x
+    def go_side_L(self):
+        x = self.tetrimino.x
+        self.tetrimino.x -= 1
+        if self.prekryti():
+            self.tetrimino.x = x
+
+    def otoc_R(self):
+        old_r = self.tetrimino.r
+        self.tetrimino.otoc_R()
+        if self.prekryti():
+            self.tetrimino.r = old_r
+    def otoc_L(self):
+        old_r = self.tetrimino.r
+        self.tetrimino.otoc_L()
+        if self.prekryti():
+            self.tetrimino.r = old_r
+
+
+pygame.init()
+
+BARVA1 = (50, 50, 50)
+BARVA2 = (0, 0, 0)
+BARVA3 = (161, 121, 226)
+BARVA4 = (207, 186, 240)
+BARVA5 = (255, 173, 179)
+size = (400, 500)
+screen = pygame.display.set_mode(size)
+pygame.display.set_caption("Tetris")
+
+konec = False
+hodiny = pygame.time.Clock()
+fps = 25
+hra = Tetris(20, 10)
+pocitadlo = 0
+zmacknuti = False
+
+
+while not konec:
+
+    if (hra.tetrimino is None) and (hra.status == "start"):
+        hra.new_tetrimino()
+
+    pocitadlo += 1
+    if (pocitadlo % fps == 0 or zmacknuti) and hra.status == "start":
+        hra.go_down()
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            konec = True
+        if event.type == pygame.KEYDOWN:
+            if hra.status != "gameover":
+                if event.key == pygame.K_d:
+                    hra.otoc_R()
+                if event.key == pygame.K_a:
+                    hra.otoc_L()
+                if event.key == pygame.K_DOWN:
+                    zmacknuti = True
+                if event.key == pygame.K_LEFT:
+                    hra.go_side_L()
+                if event.key == pygame.K_RIGHT:
+                    hra.go_side_R()
+                if event.key == pygame.K_s:
+                    hra.slam()
+            if hra.status == "gameover" or hra.status == "menu2":
+                if event.key == pygame.K_ESCAPE:
+                    hra.__init__(20, 10)
+                    hra.status = "start"
+        if event.type == pygame.KEYUP:
+                if event.key == pygame.K_DOWN:
+                    zmacknuti = False
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mys = pygame.mouse.get_pos()
+            if hra.status == "menu" or hra.status == "game":
+                if 5 <= mys[0] <= 70 and 30 <= mys[1] <= 50:
+                    hra.status = "start"            
+            if 5 <= mys[0] <= 70 and 60 <= mys[1] <= 80:
+                if hra.status == "game":    
+                    hra.status = "menu"
+                if hra.status == "gameover":    
+                    hra.status = "menu2"
+
+    screen.fill(BARVA1)
+    for i in range(hra.height):
+        for j in range(hra.width):
+            pygame.draw.rect(screen, BARVA2, [hra.x + hra.zoom * j, hra.y + hra.zoom * i, hra.zoom, hra.zoom], 1)
+            if hra.pole[i][j] > 0:
+                pygame.draw.rect(screen, barvy[hra.pole[i][j]], [hra.x + hra.zoom * j + 1, hra.y + hra.zoom * i + 1, hra.zoom - 2, hra.zoom - 2]) 
+    if hra.tetrimino is not None:
+        for i in range(4):
+            for j in range(4):
+                p = i * 4 + j
+                if p in hra.tetrimino.okoli():
+                    pygame.draw.rect(screen, barvy[hra.tetrimino.barva], [hra.x + hra.zoom * (j + hra.tetrimino.x) + 1,
+                        hra.y + hra.zoom * (i + hra.tetrimino.y) + 1, hra.zoom - 2, hra.zoom - 2])
+
+    font = pygame.font.SysFont('rockwell', 25, True, False)
+    font1 = pygame.font.SysFont('rockwell', 12, True, False)
+    text = font.render(f"Score: {str(hra.score)}", False, BARVA3)
+    text_start = font.render("Start", False, BARVA3)
+    text_menu = font.render("Menu", False, BARVA3)
+
+    text_controls_A = font1.render("A - turn left", False, BARVA3)
+    text_controls_D = font1.render("D - turn right", False, BARVA3)
+    text_controls_S = font1.render("S - slam", False, BARVA3)
+    text_controls_Move = font1.render("use arrows to move", False, BARVA3)
+    
+    text_controls_New = font1.render("Esc - play again", False, BARVA3)
+    text_game_over = font.render("Game Over", False, BARVA5) 
+    text_highscore = font1.render(f"Highcore: {str(hra.highscore)}", False, BARVA5)               
+    screen.blit(text, [5, 0])
+
+    if hra.status == "gameover":
+        screen.blit(text_game_over, [135, 20])
+        pygame.draw.rect(screen, BARVA4, [5,60,70,20])
+        screen.blit(text_menu, [7,54])
+        screen.blit(text_controls_New, [5, 24])
+        screen.blit(text_highscore, [5, 36])
+    if hra.status == "game":
+        pygame.draw.rect(screen, BARVA4, [5,30,70,20])
+        screen.blit(text_start, [11,24])
+        pygame.draw.rect(screen, BARVA4, [5,60,70,20])
+        screen.blit(text_menu, [7,54])
+    if hra.status == "menu":
+        pygame.draw.rect(screen, BARVA4, [5,30,70,20])
+        screen.blit(text_start, [11,24])
+        screen.blit(text_controls_A, [5, 54])
+        screen.blit(text_controls_D, [5, 64])
+        screen.blit(text_controls_S, [5, 74])
+        screen.blit(text_controls_Move, [5, 84])
+    if hra.status == "menu2":
+        screen.blit(text_controls_A, [5, 54])
+        screen.blit(text_controls_D, [5, 64])
+        screen.blit(text_controls_S, [5, 74])
+        screen.blit(text_controls_Move, [5, 84])
+        screen.blit(text_controls_New, [5, 104])
+        screen.blit(text_highscore, [5, 116])
+
+    pygame.display.flip()
+    hodiny.tick(fps)
+
+pygame.quit()
+\end{lstlisting}   	
+	\chapter{Blokové schéma}
+	\end{appendices}
+\end{document}
