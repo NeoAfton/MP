@@ -9,27 +9,23 @@ import random
 # barvy tetrimin
 barvy = [
     (0, 0, 0),
-    (38, 70, 83),
-    (40, 114, 113),
-    (42, 157, 143),
-    (138, 177, 125),
-    (233, 196, 106),
-    (239, 179, 102),
-    (244, 162, 97),
-    (238, 137, 89),
-    (231, 111, 81)
+    (251, 248, 204),
+    (255, 207, 210),
+    (241, 192, 232),
+    (207, 186, 240),
+    (163, 196, 243),
+    (180, 243, 248),
+    (185, 251, 192)
 ]
 # třídy
 class Tetrimino(object):
-    x = 0
-    y = 0
     ## tvary tetrimin
     tvary = [
         [[1, 5, 9, 13], [4, 5, 6, 7]],                                  # I_tetrimino
-        [[4, 5, 9, 10], [2, 6, 5, 9]],                                  # L1_tetrimino
-        [[6, 7, 9, 10], [1, 5, 6, 10]],                                 # L2_tetrimino
-        [[1, 2, 5, 9], [0, 4, 5, 6], [1, 5, 9, 8], [4, 5, 6, 10]],      # Z1_tetrimino
-        [[1, 2, 6, 10], [5, 6, 7, 9], [2, 6, 10, 11], [3, 5, 6, 7]],    # Z2_tetrimino
+        [[4, 5, 9, 10], [2, 6, 5, 9]],                                  # Z1_tetrimino 
+        [[6, 7, 9, 10], [1, 5, 6, 10]],                                 # Z2_tetrimino 
+        [[1, 2, 5, 9], [0, 4, 5, 6], [1, 5, 8, 9], [4, 5, 6, 10]],      # L1_tetrimino
+        [[1, 2, 6, 10], [5, 6, 7, 9], [2, 6, 10, 11], [3, 5, 6, 7]],    # L2_tetrimino
         [[1, 4, 5, 6], [1, 4, 5, 9], [4, 5, 6, 9], [1, 5, 6, 9]],       # T_tetrimino
         [[1, 2, 5, 6]]                                                  # O_tetrimino
     ]
@@ -38,7 +34,7 @@ class Tetrimino(object):
         self.x = x
         self.y = y
         self.typ = random.randint(0, len(self.tvary) - 1)
-        self.barva = random.randint(1, len(barvy) - 1)
+        self.barva = self.typ + 1
         self.r = 0    
     ## pole tetrimina
     def okoli(self):
@@ -53,11 +49,7 @@ class Tetrimino(object):
 
 
 class Tetris(object):
-    score = 0
-    status = "game"
-    pole = []
-    height = 0
-    width = 0
+    highscore = 0
     x = 100
     y = 60
     zoom = 20
@@ -101,7 +93,9 @@ class Tetris(object):
                 for k in range(i, 1, -1):
                     for l in range(self.width):
                         self.pole[k][l] = self.pole[k - 1][l]
-        self.score += lines ** 2
+        self.score += lines
+        if self.score > self.highscore:
+            self.highscore = self.score
     ## slam
     def slam(self):
         while not self.prekryti():
@@ -154,9 +148,11 @@ class Tetris(object):
 pygame.init()
 
 ## příprava hry
-BARVA1 = (30, 30, 30)
-BARVA2 = (0, 0, 0)
-BARVA3 = (255, 255, 255)
+BARVA1 = (50, 50, 50)       # šedá
+BARVA2 = (0, 0, 0)          # černá
+BARVA3 = (161, 121, 226)    # tmavší fialová
+BARVA4 = (207, 186, 240)    # světlá fialová
+BARVA5 = (255, 173, 179)    # růžová
 size = (400, 500)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Tetris")
@@ -195,7 +191,7 @@ while not konec:
                     hra.go_side_R()
                 if event.key == pygame.K_s:
                     hra.slam()
-            if hra.status == "gameover":
+            if hra.status == "gameover" or hra.status == "menu2":
                 if event.key == pygame.K_ESCAPE:
                     hra.__init__(20, 10)
                     hra.status = "start"
@@ -204,10 +200,15 @@ while not konec:
                     zmacknuti = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             mys = pygame.mouse.get_pos()
-            if 5 <= mys[0] <= 70 and 30 <= mys[1] <= 50:
-                hra.status = "start"
+            if hra.status == "menu" or hra.status == "game":
+                if 5 <= mys[0] <= 70 and 30 <= mys[1] <= 50:
+                    hra.status = "start"
+            
             if 5 <= mys[0] <= 70 and 60 <= mys[1] <= 80:
-                hra.status = "menu"
+                if hra.status == "game":    
+                    hra.status = "menu"
+                if hra.status == "gameover":    
+                    hra.status = "menu2"
     ### kreslení
     screen.fill(BARVA1)     #### pozadí
     for i in range(hra.height):
@@ -216,7 +217,9 @@ while not konec:
             pygame.draw.rect(screen, BARVA2, [hra.x + hra.zoom * j, hra.y + hra.zoom * i, hra.zoom, hra.zoom], 1)
             #### nakreslení čtverečku tetrimina
             if hra.pole[i][j] > 0:
-                pygame.draw.rect(screen, barvy[hra.pole[i][j]], [hra.x + hra.zoom * j + 1, hra.y + hra.zoom * i + 1, hra.zoom - 2, hra.zoom - 1])
+                pygame.draw.rect(screen, barvy[hra.pole[i][j]], [hra.x + hra.zoom * j + 1, hra.y + hra.zoom * i + 1, hra.zoom - 2, hra.zoom - 2]) 
+                    # +1, aby to divně neodskočilo
+                    # -2, aby to bylo hezký, až to zůstane ve mřížce
     #### kreslení pohybu tetrimina
     if hra.tetrimino is not None:
         for i in range(4):
@@ -226,35 +229,48 @@ while not konec:
                     pygame.draw.rect(screen, barvy[hra.tetrimino.barva], [hra.x + hra.zoom * (j + hra.tetrimino.x) + 1,
                         hra.y + hra.zoom * (i + hra.tetrimino.y) + 1, hra.zoom - 2, hra.zoom - 2])
     ### nápisy
-    font = pygame.font.SysFont('rockwell', 25, True, False)
-    font1 = pygame.font.SysFont('rockwell', 12, True, False)
-    text = font.render("Score: " + str(hra.score), True, BARVA3)
-    text_start = font.render("Start", True, BARVA3)
-    text_menu = font.render("Menu", True, BARVA3)
+    font = pygame.font.SysFont('rockwell', 25, True, False)                 # font větší
+    font1 = pygame.font.SysFont('rockwell', 12, True, False)                # font menší
+    text = font.render(f"Score: {str(hra.score)}", False, BARVA3)            # score
+    text_start = font.render("Start", False, BARVA3)                         # tlačítko start
+    text_menu = font.render("Menu", False, BARVA3)                           # tlačítko menu
     #### menu ovládání
-    text_controls_A = font1.render("A - turn left", True, BARVA3)
-    text_controls_D = font1.render("D - turn right", True, BARVA3)
-    text_controls_S = font1.render("S - slam", True, BARVA3)
-    text_controls_Move = font1.render("use arrows to move", True, BARVA3)
-    text_controls_New = font1.render("Esc - play again", True, BARVA3)
-    text_game_over = font.render("Game Over", True, (255, 125, 0))
-
+    text_controls_A = font1.render("A - turn left", False, BARVA3)
+    text_controls_D = font1.render("D - turn right", False, BARVA3)
+    text_controls_S = font1.render("S - slam", False, BARVA3)
+    text_controls_Move = font1.render("use arrows to move", False, BARVA3)
+    #### game over
+    text_controls_New = font1.render("Esc - play again", False, BARVA3)
+    text_game_over = font.render("Game Over", False, BARVA5) 
+    text_highscore = font1.render(f"Highcore: {str(hra.highscore)}", False, BARVA5)               
+    ### nakreslení score
     screen.blit(text, [5, 0])
+    ### ostatní kreslení
     if hra.status == "gameover":
         screen.blit(text_game_over, [135, 20])
-        screen.blit(text_controls_New, [5, 54])
+        pygame.draw.rect(screen, BARVA4, [5,60,70,20])
+        screen.blit(text_menu, [7,54])
+        screen.blit(text_controls_New, [5, 24])
+        screen.blit(text_highscore, [5, 36])
     if hra.status == "game":
-        pygame.draw.rect(screen, barvy[6], [5,30,70,20])
+        pygame.draw.rect(screen, BARVA4, [5,30,70,20])
         screen.blit(text_start, [11,24])
-        pygame.draw.rect(screen, barvy[6], [5,60,70,20])
+        pygame.draw.rect(screen, BARVA4, [5,60,70,20])
         screen.blit(text_menu, [7,54])
     if hra.status == "menu":
-        pygame.draw.rect(screen, barvy[6], [5,30,70,20])
+        pygame.draw.rect(screen, BARVA4, [5,30,70,20])
         screen.blit(text_start, [11,24])
         screen.blit(text_controls_A, [5, 54])
         screen.blit(text_controls_D, [5, 64])
         screen.blit(text_controls_S, [5, 74])
         screen.blit(text_controls_Move, [5, 84])
+    if hra.status == "menu2":
+        screen.blit(text_controls_A, [5, 54])
+        screen.blit(text_controls_D, [5, 64])
+        screen.blit(text_controls_S, [5, 74])
+        screen.blit(text_controls_Move, [5, 84])
+        screen.blit(text_controls_New, [5, 104])
+        screen.blit(text_highscore, [5, 116])
 
     pygame.display.flip()
     hodiny.tick(fps)
